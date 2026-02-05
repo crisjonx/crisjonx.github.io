@@ -5,6 +5,9 @@
   --text: #e6eef6; /* primary text (light) */
   --pop: #06b6d4; /* popping username color (cyan) */
   --surface: #071826; /* icon surface */
+  --purple: #7c5cff; /* base purple */
+  --purple-light: rgba(124,92,255,0.16);
+  --purple-dark: #2b105f;
 }
 
 *{box-sizing:border-box}
@@ -27,6 +30,12 @@ body{
 .name{font-size:30px;margin:0;font-weight:700}
 .name.pop{color:var(--pop)}
 
+.header-row{align-items:center}
+
+/* Projects button styles */
+.projects-btn{background:transparent;color:var(--text);border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;transition:background-color .18s ease,color .18s ease,opacity .18s ease}
+.projects-btn:hover{background:var(--purple-light);color:var(--purple-dark)}
+
 /* Tagline as bullets with separators that do NOT get underlined */
 .tag-list{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;list-style:none;padding:0;margin:8px 0 0 0;align-items:center}
 .tag-list li{position:relative;padding-bottom:4px;color:var(--muted);cursor:default}
@@ -37,16 +46,16 @@ body{
 /* separators (bullets) between items, placed after each li except last */
 .tag-list li:not(:last-child)::after{content:'•';margin-left:12px;color:var(--muted);position:static}
 
-.icons{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+.icons{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 
 /* transparent flat buttons, no shadows. scale on hover */
-.social-link{position:relative;display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:12px;cursor:pointer;transition:transform .12s ease;background:transparent;border:none;overflow:hidden}
+.social-link{position:relative;display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:10px;cursor:pointer;transition:transform .12s ease;background:transparent;border:none;overflow:hidden}
 .social-link:focus{outline:2px solid rgba(6,182,212,0.12);outline-offset:2px}
 .social-link:hover{transform:scale(1.12)}
 .social-link:active{transform:scale(1.06)}
 .social-link.pinned{outline:2px solid var(--pop);border-radius:12px}
 
-.social-img{width:34px;height:34px;display:block;object-fit:contain;filter:brightness(1.05)}
+.social-img{width:28px;height:28px;display:block;object-fit:contain;filter:brightness(1.05)}
 
 /* time fixed at bottom center */
 .time{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);font-weight:600;color:var(--muted);background:transparent;padding:6px 8px;border-radius:6px;z-index:1000}
