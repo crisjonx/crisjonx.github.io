@@ -1,115 +1,202 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <link rel="shortcut icon" href="logo.ico" type="image/x-icon">
-    <title>Crisjonx</title>
-    <meta name="description" content="Web Developer Portfolio">
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-    <meta name="theme-color" content="#1c1c1c">
-    <meta name="color-scheme" content="dark">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
-        @import url('https://cdn-uicons.flaticon.com/2.3.0/uicons-regular-rounded/css/uicons-regular-rounded.css');
-        @import url('https://cdn-uicons.flaticon.com/2.3.0/uicons-brands/css/uicons-brands.css');
-        @import url('https://cdn-uicons.flaticon.com/2.3.0/uicons-solid-rounded/css/uicons-solid-rounded.css');
-        body {
-            font-family: 'Montserrat', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #1c1c1c;
-            color: #ffffff;
-            overflow: hidden; /* Prevents scrollbars */
-        }
-        .container {
-            text-align: center;
-            padding: 40px;
-            border-radius: 15px;
-            background-color: #333;
-            box-shadow: 0 0px 25px rgba(0, 0, 0, 0.5);
-            width: 500px;
-            animation: fadeIn 1s ease-in-out; /* Fade in animation */
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        h1 {
-            font-size: 2.5em;
-            margin: 0;
-            margin-bottom: 20px;
-            animation: slideIn 1s ease-in-out; /* Slide in animation */
-        }
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        h1 i {
-            font-size: 0.7em;
-        }
-        .profiles {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        .profiles a {
-            color: #b2d6ff;
-            text-decoration: none;
-            font-size: 1.2em;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease-in-out; /* Smooth hover effect */
-        }
-        .profiles a:hover {
-            text-decoration: underline;
-            transform: translateY(-3px); /* Lift effect on hover */
-        }
-        .profiles a i {
-            margin-right: 10px;
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #999;
-        }
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-                width: auto;
-            }
-            h1 {
-                font-size: 2em;
-                margin-bottom: 10px;
-            }
-            .profiles a {
-                font-size: 1em;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>crisjonx</title>
+  <meta name="description" content="Profile homepage" />
+  <!-- Serif Google font (Merriweather) -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Under Construction <i class="fi fi-rr-tools"></i></h1>
-        <div class="profiles">
-            <a href="https://github.com/CrisMcCool" target="_blank"><i class="fi fi-brands-github"></i> My GitHub</a>
+  <main class="card" id="profile-card" role="main">
+    <div class="top">
+      <div class="avatar" aria-hidden="true"><img id="avatar-img" src="/icons/crisjonx.png" alt="avatar"></div>
+      <div style="flex:1">
+        <h1 class="name" id="display-name">crisjonx</h1>
+
+        <ul class="tag-list" aria-label="Short bio">
+          <li tabindex="0"><span class="tag-text">python</span></li>
+          <li tabindex="0"><span class="tag-text">html/css/js</span></li>
+          <li tabindex="0"><span class="tag-text">luau</span></li>
+        </ul>
+
+        <div class="icons" id="icons" style="margin-top:18px;">
+          <button class="social-link" data-username="@crisjonx" data-url="https://github.com/crisjonx" data-img="/icons/github.png" aria-label="GitHub" title="GitHub">
+            <img class="social-img" src="/icons/github.png" alt="GitHub">
+          </button>
+
+          <button class="social-link" data-username="@crisjonx" data-url="https://replit.com/@crisjonx" data-img="/icons/replit.png" aria-label="Replit" title="Replit">
+            <img class="social-img" src="/icons/replit.png" alt="Replit">
+          </button>
+		  
+		  <button class="social-link" data-username="@C7ulmr" data-url="https://www.roblox.com/users/1612618833/profile" data-img="/icons/roblox.png" aria-label="Roblox" title="Roblox">
+            <img class="social-img" src="/icons/roblox.png" alt="Roblox">
+          </button>
+		  
+		  <button class="social-link" data-username="@C7ulmr" data-url="https://steamcommunity.com/profiles/76561199851082093/" data-img="/icons/steam.png" aria-label="Steam" title="Steam">
+            <img class="social-img" src="/icons/steam.png" alt="Steam">
+          </button>
+		  
+		  <button class="social-link" data-username="@C7ulmr" data-url="https://namemc.com/profile/C7ulmr.1" data-img="/icons/namemc.png" aria-label="NameMC" title="NameMC">
+            <img class="social-img" src="/icons/namemc.png" alt="NameMC">
+          </button>
+
         </div>
-        <footer>&copy; 2024 Crisjonx</footer>
+
+      </div>
     </div>
+
+  </main>
+
+  <div class="time" id="my-time">my time is --:-- --, UTC-5</div>
+
+  <script>
+    // Behaviour:
+    // - hovering / focusing a .social-link replaces the top name and avatar image
+    // - clicking opens data-url in a new tab (mailto: preserved)
+    // - clicking a social toggles a "pinned" state (feature): when pinned, hovering other socials won't change displayed name/avatar
+    // Preload images and swap with fade to avoid flicker
+
+    const icons = document.getElementById('icons');
+    const displayName = document.getElementById('display-name');
+    const avatarImg = document.getElementById('avatar-img');
+    const myTimeEl = document.getElementById('my-time');
+
+    // keep original values to restore on leave
+    const ORIGINAL = { name: displayName.textContent, avatar: avatarImg.getAttribute('src') };
+
+    // Preload map: data-img -> HTMLImageElement
+    const PRELOAD = new Map();
+
+    function preloadImages(){
+      const imgs = new Set();
+      document.querySelectorAll('.social-link').forEach(btn => {
+        const src = btn.dataset.img;
+        if (src) imgs.add(src);
+      });
+
+      imgs.forEach(src => {
+        const img = new Image();
+        img.src = src; // starts loading
+        PRELOAD.set(src, img);
+      });
+    }
+
+    // swap avatar with fade that waits for load (preloaded images will usually be instant)
+    let currentLoadHandler = null;
+    function swapAvatar(newSrc){
+      if (!newSrc) return;
+      const cur = avatarImg.getAttribute('src');
+      if (cur === newSrc) return;
+
+      if (currentLoadHandler) avatarImg.removeEventListener('load', currentLoadHandler);
+
+      currentLoadHandler = function(){
+        avatarImg.style.opacity = '1';
+        avatarImg.removeEventListener('load', currentLoadHandler);
+        currentLoadHandler = null;
+      };
+
+      avatarImg.addEventListener('load', currentLoadHandler);
+      avatarImg.style.opacity = '0';
+      avatarImg.setAttribute('src', newSrc);
+      setTimeout(() => { if (!currentLoadHandler) return; avatarImg.style.opacity = '1'; }, 250);
+    }
+
+    function showForButton(btn){
+      const name = btn.dataset.username || '';
+      const img = btn.dataset.img || '';
+
+      if (name) {
+        displayName.textContent = name;
+        displayName.classList.add('pop');
+      }
+      if (img) swapAvatar(img);
+    }
+
+    function hideForButton(){
+      displayName.textContent = ORIGINAL.name;
+      displayName.classList.remove('pop');
+      swapAvatar(ORIGINAL.avatar);
+    }
+
+    // pinned feature state
+    let pinned = null;
+
+    // wire events for socials
+    icons.addEventListener('pointerover', e => {
+      const btn = e.target.closest('.social-link');
+      if (!btn) return;
+      if (pinned) return; // ignore hovers when pinned
+      showForButton(btn);
+    });
+
+    icons.addEventListener('pointerout', e => {
+      const btn = e.target.closest('.social-link');
+      if (!btn) return;
+      if (pinned) return; // do nothing if pinned
+      hideForButton();
+    });
+
+    icons.addEventListener('focusin', e => {
+      const btn = e.target.closest('.social-link');
+      if (!btn) return;
+      if (pinned) return;
+      showForButton(btn);
+    });
+    icons.addEventListener('focusout', e => { if (!pinned) hideForButton(); });
+
+    icons.addEventListener('click', e => {
+      const btn = e.target.closest('.social-link');
+      if (!btn) return;
+      const url = btn.dataset.url;
+      // middle / ctrl-click behavior: pin if middle click? we'll treat normal click as pin toggle when user uses ctrl/meta to open in new tab normally
+      // if user wants to open link: use ctrl/cmd/shift click — we won't intercept
+      if (e.ctrlKey || e.metaKey || e.shiftKey) {
+        if (!url) return;
+        // allow normal open in new tab/window
+        return;
+      }
+
+      // if it's just a click without modifier, toggle pin
+      if (pinned === btn) {
+        // unpin
+        btn.classList.remove('pinned');
+        pinned = null;
+        hideForButton();
+        return;
+      }
+
+      // pin this button
+      if (pinned) pinned.classList.remove('pinned');
+      pinned = btn;
+      pinned.classList.add('pinned');
+      // show it immediately
+      showForButton(btn);
+    });
+
+    preloadImages();
+
+    // Time display in UTC-5 (fixed offset). shows `my time is 03:45 PM, UTC-5`
+    function updateTime(){
+      const now = new Date();
+      // convert to UTC ms, then apply -5h offset
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const target = new Date(utc + (-5 * 3600000));
+
+      let hours = target.getHours();
+      const minutes = target.getMinutes();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12; hours = hours ? hours : 12; // 0 -> 12
+      const mm = minutes.toString().padStart(2,'0');
+      myTimeEl.textContent = `my time is ${hours}:${mm} ${ampm}, UTC-5`;
+    }
+
+    updateTime();
+    // update once a minute
+    setInterval(updateTime, 60*1000);
+  </script>
 </body>
 </html>
