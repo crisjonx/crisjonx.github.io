@@ -1,13 +1,13 @@
 /* styles.css — extracted from index.html */
 :root{
-  --bg: #f6efff; /* really light purple background requested */
-  --muted: #6b7280; /* secondary text */
-  --text: #0f1724; /* primary text (dark) */
-  --pop: #06b6d4; /* popping username color (cyan) */
-  --surface: #f2ecff; /* icon surface (slightly darker than page) */
+  --bg: #0e0b16; /* dark purple background */
+  --muted: #a3a3c2; /* secondary text */
+  --text: #f4f3ff; /* primary text */
+  --pop: #9b8cff; /* popping username color */
+  --surface: #17122b; /* icon/avatar surface */
   --purple: #7c5cff; /* base purple */
-  --purple-light: rgba(124,92,255,0.28);
-  --purple-dark: #2b105f;
+  --purple-light: rgba(155,140,255,0.22); /* hover bg */
+  --purple-dark: #dcd6ff; /* hover text */
 }
 
 *{box-sizing:border-box}
