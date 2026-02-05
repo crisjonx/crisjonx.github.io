@@ -30,16 +30,16 @@
           <button class="social-link" data-username="@crisjonx" data-url="https://replit.com/@crisjonx" data-img="/icons/replit.png" aria-label="Replit" title="Replit">
             <img class="social-img" src="/icons/replit.png" alt="Replit">
           </button>
-		  
-		  <button class="social-link" data-username="@C7ulmr" data-url="https://www.roblox.com/users/1612618833/profile" data-img="/icons/roblox.png" aria-label="Roblox" title="Roblox">
+          
+          <button class="social-link" data-username="@C7ulmr" data-url="https://www.roblox.com/users/1612618833/profile" data-img="/icons/roblox.png" aria-label="Roblox" title="Roblox">
             <img class="social-img" src="/icons/roblox.png" alt="Roblox">
           </button>
-		  
-		  <button class="social-link" data-username="@C7ulmr" data-url="https://steamcommunity.com/profiles/76561199851082093/" data-img="/icons/steam.png" aria-label="Steam" title="Steam">
+          
+          <button class="social-link" data-username="@C7ulmr" data-url="https://steamcommunity.com/profiles/76561199851082093/" data-img="/icons/steam.png" aria-label="Steam" title="Steam">
             <img class="social-img" src="/icons/steam.png" alt="Steam">
           </button>
-		  
-		  <button class="social-link" data-username="@C7ulmr" data-url="https://namemc.com/profile/C7ulmr.1" data-img="/icons/namemc.png" aria-label="NameMC" title="NameMC">
+          
+          <button class="social-link" data-username="@C7ulmr" data-url="https://namemc.com/profile/C7ulmr.1" data-img="/icons/namemc.png" aria-label="NameMC" title="NameMC">
             <img class="social-img" src="/icons/namemc.png" alt="NameMC">
           </button>
 
@@ -55,8 +55,8 @@
   <script>
     // Behaviour:
     // - hovering / focusing a .social-link replaces the top name and avatar image
-    // - clicking opens data-url in a new tab (mailto: preserved)
-    // - clicking a social toggles a "pinned" state (feature): when pinned, hovering other socials won't change displayed name/avatar
+    // - single-click opens the social link in a new tab (default behaviour you expected)
+    // - double-click toggles a "pinned" state (when pinned, hovering other socials won't change displayed name/avatar)
     // Preload images and swap with fade to avoid flicker
 
     const icons = document.getElementById('icons');
@@ -148,32 +148,29 @@
     });
     icons.addEventListener('focusout', e => { if (!pinned) hideForButton(); });
 
+    // open link on single click
     icons.addEventListener('click', e => {
       const btn = e.target.closest('.social-link');
       if (!btn) return;
       const url = btn.dataset.url;
-      // middle / ctrl-click behavior: pin if middle click? we'll treat normal click as pin toggle when user uses ctrl/meta to open in new tab normally
-      // if user wants to open link: use ctrl/cmd/shift click — we won't intercept
-      if (e.ctrlKey || e.metaKey || e.shiftKey) {
-        if (!url) return;
-        // allow normal open in new tab/window
-        return;
-      }
+      if (!url) return;
+      // open the url in a new tab
+      window.open(url, '_blank', 'noopener');
+    });
 
-      // if it's just a click without modifier, toggle pin
+    // double-click toggles pin
+    icons.addEventListener('dblclick', e => {
+      const btn = e.target.closest('.social-link');
+      if (!btn) return;
       if (pinned === btn) {
-        // unpin
         btn.classList.remove('pinned');
         pinned = null;
         hideForButton();
         return;
       }
-
-      // pin this button
       if (pinned) pinned.classList.remove('pinned');
       pinned = btn;
       pinned.classList.add('pinned');
-      // show it immediately
       showForButton(btn);
     });
 
