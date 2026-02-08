@@ -6,27 +6,12 @@
   <title>crisjonx</title>
   <meta name="description" content="Profile homepage" />
   <link rel="icon" type="image/x-icon" href="/icons/logo.ico">
-  <!-- Serif Google font (Merriweather) -->
+  <!-- Merriweather -->
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    /* Small view-specific styles for the projects view and back button */
-    .back-btn{display:none;background:transparent;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:6px;border-radius:8px}
-    .back-btn.visible{display:inline-flex;align-items:center;justify-content:center}
-
-    /* projects list */
-    .projects{margin-top:12px}
-    .project-item{display:flex;flex-direction:column;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
-    .project-link{font-weight:700;color:var(--text);text-decoration:none;position:relative;display:inline-block;padding-bottom:4px}
-    .project-link::after{content:'';position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--pop);transform:scaleX(0);transform-origin:left center;transition:transform 200ms cubic-bezier(.2,.9,.2,1)}
-    .project-link:hover::after,.project-link:focus::after{transform:scaleX(1)}
-    .project-desc{color:var(--muted);font-size:14px;margin-top:4px}
-
-    .hidden{display:none}
-  </style>
 </head>
 <body>
-  <!-- Projects button placed at the very top-right of the viewport -->
+  <!-- single Projects button at top-right -->
   <div class="topbar">
     <button id="projects-btn" class="projects-btn" aria-label="projects">Projects</button>
   </div>
@@ -40,8 +25,7 @@
             <button id="back-btn" class="back-btn" aria-label="back">←</button>
             <h1 class="name" id="display-name">crisjonx</h1>
           </div>
-          <!-- Projects button (text by default). Hover: rounded rectangle fades in (light purple); text becomes dark purple -->
-          <button id="projects-btn-top" class="projects-btn" aria-label="projects">Projects</button>
+          <!-- single Projects button (topbar already shows one, this keeps header tidy) -->
         </div>
 
         <ul class="tag-list" id="tag-list" aria-label="Short bio">
@@ -51,9 +35,7 @@
         </ul>
 
         <!-- projects container (hidden by default) -->
-        <section id="projects-container" class="projects hidden" aria-label="Projects list">
-          <!-- project items will be rendered here by JS -->
-        </section>
+        <section id="projects-container" class="projects hidden" aria-label="Projects list"></section>
 
         <div class="icons" id="icons" style="margin-top:14px;">
           <button class="social-link" data-username="@crisjonx" data-url="https://github.com/crisjonx" data-img="/icons/github.png" aria-label="GitHub" title="GitHub">
@@ -63,19 +45,18 @@
           <button class="social-link" data-username="@crisjonx" data-url="https://replit.com/@crisjonx" data-img="/icons/replit.png" aria-label="Replit" title="Replit">
             <img class="social-img" src="/icons/replit.png" alt="Replit">
           </button>
-          
+
           <button class="social-link" data-username="@C7ulmr" data-url="https://www.roblox.com/users/1612618833/profile" data-img="/icons/roblox.png" aria-label="Roblox" title="Roblox">
             <img class="social-img" src="/icons/roblox.png" alt="Roblox">
           </button>
-          
+
           <button class="social-link" data-username="@C7ulmr" data-url="https://steamcommunity.com/profiles/76561199851082093/" data-img="/icons/steam.png" aria-label="Steam" title="Steam">
             <img class="social-img" src="/icons/steam.png" alt="Steam">
           </button>
-          
+
           <button class="social-link" data-username="@C7ulmr" data-url="https://namemc.com/profile/C7ulmr.1" data-img="/icons/namemc.png" aria-label="NameMC" title="NameMC">
             <img class="social-img" src="/icons/namemc.png" alt="NameMC">
           </button>
-
         </div>
 
       </div>
@@ -86,33 +67,28 @@
   <div class="time" id="my-time">my time is --:-- --, UTC-5</div>
 
   <script>
-    // Behaviour updates per request:
-    // - clicking Projects toggles a projects view: hides icons, replaces name with "about", replaces bio with projects list
-    // - clicking the back arrow returns to the normal view
-    // - social icon clicks redirect the CURRENT page (same tab)
-    // - projects are rendered from a JS array (editable below). Each project is one-line desc and clicking navigates same tab.
-
+    // elements
     const icons = document.getElementById('icons');
     const displayName = document.getElementById('display-name');
     const avatarImg = document.getElementById('avatar-img');
     const myTimeEl = document.getElementById('my-time');
-    const projectsBtn = document.getElementById('projects-btn-top');
+    const projectsBtn = document.getElementById('projects-btn');
     const backBtn = document.getElementById('back-btn');
     const tagList = document.getElementById('tag-list');
     const projectsContainer = document.getElementById('projects-container');
 
     const ORIGINAL = { name: displayName.textContent, avatar: avatarImg.getAttribute('src') };
 
-    // Project data: edit this array to add/remove projects. Each item: {name, href, desc}
+    // projects array (one-line desc). Edit as needed.
     const projects = [
-      { name: 'Takina', href: 'https://git.orangc.net/c/takina', desc: 'Open-source Discord bot (Python)'},
-      { name: 'pyminaret', href: 'https://git.orangc.net/c/pyminaret', desc: 'CLI prayer notifier'},
-      { name: 'qurandl', href: 'https://git.orangc.net/c/qurandl', desc: "Mass-download Qur'an program"},
-      { name: 'Walls', href: 'https://orangc.net/c/walls', desc: 'Curated wallpaper collection'},
-      { name: 'Create-addons', href: 'https://create.orangc.net', desc: 'Index of Create mod addons'}
+      { name: 'Takina', href: 'https://git.orangc.net/c/takina', desc: 'Open-source Discord bot (Python)' },
+      { name: 'pyminaret', href: 'https://git.orangc.net/c/pyminaret', desc: 'CLI prayer notifier' },
+      { name: 'qurandl', href: 'https://git.orangc.net/c/qurandl', desc: 'Mass-download Qur\\'an program' },
+      { name: 'Walls', href: 'https://orangc.net/c/walls', desc: 'Curated wallpaper collection' },
+      { name: 'Create-addons', href: 'https://create.orangc.net', desc: 'Index of Create mod addons' }
     ];
 
-    // render projects into projectsContainer
+    // render projects: anchor is inline-block so underline follows text width only
     function renderProjects(){
       projectsContainer.innerHTML = '';
       projects.forEach(p => {
@@ -123,15 +99,18 @@
         a.className = 'project-link';
         a.href = p.href;
         a.textContent = p.name;
-        // default anchor behaviour opens same tab (as requested)
+        a.setAttribute('role','link');
+        a.style.display = 'inline-block'; // ensure underline width equals text
 
         const desc = document.createElement('div');
         desc.className = 'project-desc';
         desc.textContent = p.desc;
 
-        // clicking anywhere on the item should follow link
-        item.addEventListener('click', () => { window.location.href = p.href; });
-        // but the anchor keeps semantics for middle-clicking if user wants it
+        // clicking item navigates same tab
+        item.addEventListener('click', (ev) => {
+          // if user clicked a link with modifier, let the browser handle it (rare)
+          window.location.href = p.href;
+        });
 
         item.appendChild(a);
         item.appendChild(desc);
@@ -139,18 +118,13 @@
       });
     }
 
-    // show projects view
+    // enter/exit projects
     function enterProjects(){
-      // hide icons
       icons.classList.add('hidden');
-      // change name to "about"
-      displayName.textContent = 'about';
-      // hide taglist
+      displayName.textContent = 'projects'; // changed as requested
       tagList.classList.add('hidden');
-      // show projects
       renderProjects();
       projectsContainer.classList.remove('hidden');
-      // show back button
       backBtn.classList.add('visible');
     }
 
@@ -165,63 +139,69 @@
     projectsBtn.addEventListener('click', enterProjects);
     backBtn.addEventListener('click', exitProjects);
 
-    // make icons change behavior to redirect current tab (same page)
+    // social icon clicks -> same-tab redirect
     icons.addEventListener('click', e => {
       const btn = e.target.closest('.social-link');
       if (!btn) return;
       const url = btn.dataset.url;
       if (!url) return;
-      window.location.href = url; // same-tab redirect
+      window.location.href = url;
     });
 
-    // keep hover name-change behaviour but do NOT change avatar on hover
+    // hover name change (no avatar swap)
     icons.addEventListener('pointerover', e => {
       const btn = e.target.closest('.social-link');
       if (!btn) return;
-      showForButton(btn);
+      const name = btn.dataset.username || '';
+      if (name) displayName.textContent = name;
     });
-    icons.addEventListener('pointerout', hideForButton);
+    icons.addEventListener('pointerout', () => {
+      displayName.textContent = ORIGINAL.name;
+    });
 
-    // double-click pinning unchanged (still changes avatar)
+    // double-click pin: same as before (changes avatar)
+    let pinned = null;
     icons.addEventListener('dblclick', e => {
       const btn = e.target.closest('.social-link');
       if (!btn) return;
       if (pinned === btn) {
         btn.classList.remove('pinned');
         pinned = null;
-        hideForButton();
-        swapAvatar(ORIGINAL.avatar);
+        displayName.textContent = ORIGINAL.name;
+        avatarImg.setAttribute('src', ORIGINAL.avatar);
         return;
       }
       if (pinned) pinned.classList.remove('pinned');
       pinned = btn;
       pinned.classList.add('pinned');
       const img = btn.dataset.img || null;
-      if (img) swapAvatar(img);
-      showForButton(btn);
+      if (img) avatarImg.setAttribute('src', img);
+      const name = btn.dataset.username || '';
+      if (name) displayName.textContent = name;
     });
 
-    // existing image preload and time code (unchanged)
-    const PRELOADMAP = new Map();
-    function preloadImages(){
-      const imgs = new Set();
-      document.querySelectorAll('.social-link').forEach(btn => { const src = btn.dataset.img; if (src) imgs.add(src); });
-      imgs.forEach(src => { const img = new Image(); img.src = src; PRELOADMAP.set(src,img); });
+    // preload icons (no change)
+    (function preload(){
+      document.querySelectorAll('.social-link').forEach(btn => {
+        const src = btn.dataset.img;
+        if (!src) return;
+        const img = new Image(); img.src = src;
+      });
+    })();
+
+    // time (UTC-5 display, unchanged)
+    function updateTime(){
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const target = new Date(utc + (-5 * 3600000));
+      let hours = target.getHours();
+      const minutes = target.getMinutes();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12; hours = hours ? hours : 12;
+      const mm = minutes.toString().padStart(2,'0');
+      myTimeEl.textContent = `my time is ${hours}:${mm} ${ampm}, UTC-5`;
     }
-    preloadImages();
-
-    // copy of swapAvatar, showForButton, hideForButton (simplified)
-    let currentLoadHandler = null;
-    function swapAvatar(newSrc){ if (!newSrc) return; const cur = avatarImg.getAttribute('src'); if (cur === newSrc) return; if (currentLoadHandler) avatarImg.removeEventListener('load', currentLoadHandler); currentLoadHandler = function(){ avatarImg.style.opacity = '1'; avatarImg.removeEventListener('load', currentLoadHandler); currentLoadHandler = null; }; avatarImg.addEventListener('load', currentLoadHandler); avatarImg.style.opacity = '0'; avatarImg.setAttribute('src', newSrc); setTimeout(() => { if (!currentLoadHandler) return; avatarImg.style.opacity = '1'; }, 250); }
-
-    function showForButton(btn){ const name = btn.dataset.username || ''; if (name) { displayName.textContent = name; displayName.classList.add('pop'); } }
-    function hideForButton(){ displayName.textContent = ORIGINAL.name; displayName.classList.remove('pop'); if (!pinned) swapAvatar(ORIGINAL.avatar); }
-
-    let pinned = null;
-
-    // Time display in UTC-5 (fixed offset). shows `my time is 03:45 PM, UTC-5`
-    function updateTime(){ const now = new Date(); const utc = now.getTime() + (now.getTimezoneOffset() * 60000); const target = new Date(utc + (-5 * 3600000)); let hours = target.getHours(); const minutes = target.getMinutes(); const ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12; hours = hours ? hours : 12; const mm = minutes.toString().padStart(2,'0'); myTimeEl.textContent = `my time is ${hours}:${mm} ${ampm}, UTC-5`; }
-    updateTime(); setInterval(updateTime, 60*1000);
+    updateTime(); setInterval(updateTime, 60000);
   </script>
 </body>
 </html>
