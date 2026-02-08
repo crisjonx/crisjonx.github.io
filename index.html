@@ -11,23 +11,25 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Projects button fixed top-right -->
-  <div class="topbar">
-    <button id="projects-btn" class="projects-btn" aria-label="projects">Projects</button>
-  </div>
-
   <main class="card" id="profile-card" role="main">
     <div class="top">
       <div class="avatar" aria-hidden="true">
         <img id="avatar-img" src="/icons/crisjonx.png" alt="avatar">
       </div>
 
-      <div style="flex:1">
-        <!-- Name on its own line; back arrow row is below it and hidden until projects open -->
+      <div class="meta" style="flex:1">
+        <!-- header row: name on its own line (left), Projects button on the right -->
         <div class="header-row">
-          <h1 class="name" id="display-name">crisjonx</h1>
-          <div class="back-row">
-            <button id="back-btn" class="back-btn" aria-label="back">← projects</button>
+          <div class="header-column">
+            <h1 class="name" id="display-name">crisjonx</h1>
+            <!-- back arrow appears BELOW the name when visible -->
+            <div class="back-row">
+              <button id="back-btn" class="back-btn" aria-label="back">←</button>
+            </div>
+          </div>
+
+          <div class="header-actions">
+            <button id="projects-btn" class="projects-btn" aria-label="projects">Projects</button>
           </div>
         </div>
 
@@ -61,139 +63,12 @@
             <img class="social-img" src="/icons/namemc.png" alt="NameMC">
           </button>
         </div>
-
       </div>
     </div>
   </main>
 
   <div class="time" id="my-time">my time is --:-- --, UTC-5</div>
 
-  <script>
-    // Elements
-    const icons = document.getElementById('icons');
-    const displayName = document.getElementById('display-name');
-    const avatarImg = document.getElementById('avatar-img');
-    const myTimeEl = document.getElementById('my-time');
-    const projectsBtn = document.getElementById('projects-btn');
-    const backBtn = document.getElementById('back-btn');
-    const tagList = document.getElementById('tag-list');
-    const projectsContainer = document.getElementById('projects-container');
-
-    const ORIGINAL = { name: displayName.textContent, avatar: avatarImg.getAttribute('src') };
-
-    // Projects data (edit here)
-    const projects = [
-      { name: 'pyminaret', href: 'https://git.orangc.net/c/pyminaret', desc: 'CLI prayer notifier' },
-      { name: 'qurandl', href: 'https://git.orangc.net/c/qurandl', desc: "Mass-download Qur'an program" },
-      { name: 'Walls', href: 'https://orangc.net/c/walls', desc: 'Curated wallpaper collection' },
-      { name: 'Create-addons', href: 'https://create.orangc.net', desc: 'Index of Create mod addons' }
-    ];
-
-    function renderProjects(){
-      projectsContainer.innerHTML = '';
-      projects.forEach(p => {
-        const item = document.createElement('div');
-        item.className = 'project-item';
-
-        const a = document.createElement('a');
-        a.className = 'project-link';
-        a.href = p.href;
-        a.textContent = p.name;
-        a.style.display = 'inline-block';
-
-        const desc = document.createElement('div');
-        desc.className = 'project-desc';
-        desc.textContent = p.desc;
-
-        item.addEventListener('click', () => { window.location.href = p.href; });
-
-        item.appendChild(a);
-        item.appendChild(desc);
-        projectsContainer.appendChild(item);
-      });
-    }
-
-    function enterProjects(){
-      icons.classList.add('hidden');
-      displayName.textContent = 'projects';
-      tagList.classList.add('hidden');
-      renderProjects();
-      projectsContainer.classList.remove('hidden');
-      backBtn.classList.add('visible');
-    }
-
-    function exitProjects(){
-      icons.classList.remove('hidden');
-      displayName.textContent = ORIGINAL.name;
-      tagList.classList.remove('hidden');
-      projectsContainer.classList.add('hidden');
-      backBtn.classList.remove('visible');
-    }
-
-    projectsBtn.addEventListener('click', enterProjects);
-    backBtn.addEventListener('click', exitProjects);
-
-    // icons: same-tab redirect
-    icons.addEventListener('click', e => {
-      const btn = e.target.closest('.social-link');
-      if (!btn) return;
-      const url = btn.dataset.url;
-      if (!url) return;
-      window.location.href = url;
-    });
-
-    // hover name change only
-    icons.addEventListener('pointerover', e => {
-      const btn = e.target.closest('.social-link');
-      if (!btn) return;
-      const name = btn.dataset.username || '';
-      if (name) displayName.textContent = name;
-    });
-    icons.addEventListener('pointerout', () => { displayName.textContent = ORIGINAL.name; });
-
-    // double-click pin (changes avatar)
-    let pinned = null;
-    icons.addEventListener('dblclick', e => {
-      const btn = e.target.closest('.social-link');
-      if (!btn) return;
-      if (pinned === btn) {
-        btn.classList.remove('pinned');
-        pinned = null;
-        displayName.textContent = ORIGINAL.name;
-        avatarImg.setAttribute('src', ORIGINAL.avatar);
-        return;
-      }
-      if (pinned) pinned.classList.remove('pinned');
-      pinned = btn;
-      pinned.classList.add('pinned');
-      const img = btn.dataset.img || null;
-      if (img) avatarImg.setAttribute('src', img);
-      const name = btn.dataset.username || '';
-      if (name) displayName.textContent = name;
-    });
-
-    // preload icons
-    (function preload(){
-      document.querySelectorAll('.social-link').forEach(btn => {
-        const src = btn.dataset.img;
-        if (!src) return;
-        const img = new Image(); img.src = src;
-      });
-    })();
-
-    // time (UTC-5)
-    function updateTime(){
-      const now = new Date();
-      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-      const target = new Date(utc + (-5 * 3600000));
-      let hours = target.getHours();
-      const minutes = target.getMinutes();
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12; hours = hours ? hours : 12;
-      const mm = minutes.toString().padStart(2,'0');
-      myTimeEl.textContent = `my time is ${hours}:${mm} ${ampm}, UTC-5`;
-    }
-    updateTime(); setInterval(updateTime, 60000);
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
