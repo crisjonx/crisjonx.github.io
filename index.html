@@ -9,23 +9,51 @@
   <!-- Serif Google font (Merriweather) -->
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Small view-specific styles for the projects view and back button */
+    .back-btn{display:none;background:transparent;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:6px;border-radius:8px}
+    .back-btn.visible{display:inline-flex;align-items:center;justify-content:center}
+
+    /* projects list */
+    .projects{margin-top:12px}
+    .project-item{display:flex;flex-direction:column;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+    .project-link{font-weight:700;color:var(--text);text-decoration:none;position:relative;display:inline-block;padding-bottom:4px}
+    .project-link::after{content:'';position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--pop);transform:scaleX(0);transform-origin:left center;transition:transform 200ms cubic-bezier(.2,.9,.2,1)}
+    .project-link:hover::after,.project-link:focus::after{transform:scaleX(1)}
+    .project-desc{color:var(--muted);font-size:14px;margin-top:4px}
+
+    .hidden{display:none}
+  </style>
 </head>
 <body>
+  <!-- Projects button placed at the very top-right of the viewport -->
+  <div class="topbar">
+    <button id="projects-btn" class="projects-btn" aria-label="projects">Projects</button>
+  </div>
+
   <main class="card" id="profile-card" role="main">
     <div class="top">
       <div class="avatar" aria-hidden="true"><img id="avatar-img" src="/icons/crisjonx.png" alt="avatar"></div>
       <div style="flex:1">
         <div class="header-row" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-          <h1 class="name" id="display-name">crisjonx</h1>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button id="back-btn" class="back-btn" aria-label="back">←</button>
+            <h1 class="name" id="display-name">crisjonx</h1>
+          </div>
           <!-- Projects button (text by default). Hover: rounded rectangle fades in (light purple); text becomes dark purple -->
-          <button id="projects-btn" class="projects-btn" aria-label="projects">Projects</button>
+          <button id="projects-btn-top" class="projects-btn" aria-label="projects">Projects</button>
         </div>
 
-        <ul class="tag-list" aria-label="Short bio">
+        <ul class="tag-list" id="tag-list" aria-label="Short bio">
           <li tabindex="0"><span class="tag-text">python</span></li>
           <li tabindex="0"><span class="tag-text">html/css/js</span></li>
           <li tabindex="0"><span class="tag-text">luau</span></li>
         </ul>
+
+        <!-- projects container (hidden by default) -->
+        <section id="projects-container" class="projects hidden" aria-label="Projects list">
+          <!-- project items will be rendered here by JS -->
+        </section>
 
         <div class="icons" id="icons" style="margin-top:14px;">
           <button class="social-link" data-username="@crisjonx" data-url="https://github.com/crisjonx" data-img="/icons/github.png" aria-label="GitHub" title="GitHub">
@@ -58,111 +86,103 @@
   <div class="time" id="my-time">my time is --:-- --, UTC-5</div>
 
   <script>
-    // Behaviour updates:
-    // - hovering a social WILL change the displayed name only (avatar no longer changes on hover)
-    // - double-click still toggles pin; pinning WILL change the avatar to the pinned social's image
-    // - single-click opens the link in a new tab
-    // - Projects button navigates to /projects
+    // Behaviour updates per request:
+    // - clicking Projects toggles a projects view: hides icons, replaces name with "about", replaces bio with projects list
+    // - clicking the back arrow returns to the normal view
+    // - social icon clicks redirect the CURRENT page (same tab)
+    // - projects are rendered from a JS array (editable below). Each project is one-line desc and clicking navigates same tab.
 
     const icons = document.getElementById('icons');
     const displayName = document.getElementById('display-name');
     const avatarImg = document.getElementById('avatar-img');
     const myTimeEl = document.getElementById('my-time');
-    const projectsBtn = document.getElementById('projects-btn');
+    const projectsBtn = document.getElementById('projects-btn-top');
+    const backBtn = document.getElementById('back-btn');
+    const tagList = document.getElementById('tag-list');
+    const projectsContainer = document.getElementById('projects-container');
 
-    // keep original values to restore on leave
     const ORIGINAL = { name: displayName.textContent, avatar: avatarImg.getAttribute('src') };
 
-    // Preload map: data-img -> HTMLImageElement
-    const PRELOAD = new Map();
+    // Project data: edit this array to add/remove projects. Each item: {name, href, desc}
+    const projects = [
+      { name: 'Takina', href: 'https://git.orangc.net/c/takina', desc: 'Open-source Discord bot (Python)'},
+      { name: 'pyminaret', href: 'https://git.orangc.net/c/pyminaret', desc: 'CLI prayer notifier'},
+      { name: 'qurandl', href: 'https://git.orangc.net/c/qurandl', desc: "Mass-download Qur'an program"},
+      { name: 'Walls', href: 'https://orangc.net/c/walls', desc: 'Curated wallpaper collection'},
+      { name: 'Create-addons', href: 'https://create.orangc.net', desc: 'Index of Create mod addons'}
+    ];
 
-    function preloadImages(){
-      const imgs = new Set();
-      document.querySelectorAll('.social-link').forEach(btn => {
-        const src = btn.dataset.img;
-        if (src) imgs.add(src);
+    // render projects into projectsContainer
+    function renderProjects(){
+      projectsContainer.innerHTML = '';
+      projects.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'project-item';
+
+        const a = document.createElement('a');
+        a.className = 'project-link';
+        a.href = p.href;
+        a.textContent = p.name;
+        // default anchor behaviour opens same tab (as requested)
+
+        const desc = document.createElement('div');
+        desc.className = 'project-desc';
+        desc.textContent = p.desc;
+
+        // clicking anywhere on the item should follow link
+        item.addEventListener('click', () => { window.location.href = p.href; });
+        // but the anchor keeps semantics for middle-clicking if user wants it
+
+        item.appendChild(a);
+        item.appendChild(desc);
+        projectsContainer.appendChild(item);
       });
-
-      imgs.forEach(src => {
-        const img = new Image();
-        img.src = src; // starts loading
-        PRELOAD.set(src, img);
-      });
     }
 
-    // swap avatar with fade (used only for pin/unpin)
-    let currentLoadHandler = null;
-    function swapAvatar(newSrc){
-      if (!newSrc) return;
-      const cur = avatarImg.getAttribute('src');
-      if (cur === newSrc) return;
-
-      if (currentLoadHandler) avatarImg.removeEventListener('load', currentLoadHandler);
-
-      currentLoadHandler = function(){
-        avatarImg.style.opacity = '1';
-        avatarImg.removeEventListener('load', currentLoadHandler);
-        currentLoadHandler = null;
-      };
-
-      avatarImg.addEventListener('load', currentLoadHandler);
-      avatarImg.style.opacity = '0';
-      avatarImg.setAttribute('src', newSrc);
-      setTimeout(() => { if (!currentLoadHandler) return; avatarImg.style.opacity = '1'; }, 250);
+    // show projects view
+    function enterProjects(){
+      // hide icons
+      icons.classList.add('hidden');
+      // change name to "about"
+      displayName.textContent = 'about';
+      // hide taglist
+      tagList.classList.add('hidden');
+      // show projects
+      renderProjects();
+      projectsContainer.classList.remove('hidden');
+      // show back button
+      backBtn.classList.add('visible');
     }
 
-    function showForButton(btn){
-      const name = btn.dataset.username || '';
-      // only change the displayed text on hover/focus
-      if (name) {
-        displayName.textContent = name;
-        displayName.classList.add('pop');
-      }
-    }
-
-    function hideForButton(){
+    function exitProjects(){
+      icons.classList.remove('hidden');
       displayName.textContent = ORIGINAL.name;
-      displayName.classList.remove('pop');
-      // if not pinned, restore original avatar
-      if (!pinned) swapAvatar(ORIGINAL.avatar);
+      tagList.classList.remove('hidden');
+      projectsContainer.classList.add('hidden');
+      backBtn.classList.remove('visible');
     }
 
-    // pinned feature state
-    let pinned = null;
+    projectsBtn.addEventListener('click', enterProjects);
+    backBtn.addEventListener('click', exitProjects);
 
-    // wire events for socials
-    icons.addEventListener('pointerover', e => {
-      const btn = e.target.closest('.social-link');
-      if (!btn) return;
-      if (pinned) return; // ignore hovers when pinned
-      showForButton(btn);
-    });
-
-    icons.addEventListener('pointerout', e => {
-      const btn = e.target.closest('.social-link');
-      if (!btn) return;
-      if (pinned) return; // do nothing if pinned
-      hideForButton();
-    });
-
-    icons.addEventListener('focusin', e => {
-      const btn = e.target.closest('.social-link');
-      if (!btn) return;
-      if (pinned) return;
-      showForButton(btn);
-    });
-    icons.addEventListener('focusout', e => { if (!pinned) hideForButton(); });
-
-    // open link on single click
+    // make icons change behavior to redirect current tab (same page)
     icons.addEventListener('click', e => {
       const btn = e.target.closest('.social-link');
       if (!btn) return;
       const url = btn.dataset.url;
       if (!url) return;
-      window.open(url, '_blank', 'noopener');
+      window.location.href = url; // same-tab redirect
     });
 
-    // double-click toggles pin (pin WILL change avatar)
+    // keep hover name-change behaviour but do NOT change avatar on hover
+    icons.addEventListener('pointerover', e => {
+      const btn = e.target.closest('.social-link');
+      if (!btn) return;
+      showForButton(btn);
+    });
+    icons.addEventListener('pointerout', hideForButton);
+
+    // double-click pinning unchanged (still changes avatar)
     icons.addEventListener('dblclick', e => {
       const btn = e.target.closest('.social-link');
       if (!btn) return;
@@ -176,35 +196,32 @@
       if (pinned) pinned.classList.remove('pinned');
       pinned = btn;
       pinned.classList.add('pinned');
-      // change avatar to pinned image
       const img = btn.dataset.img || null;
       if (img) swapAvatar(img);
       showForButton(btn);
     });
 
-    // simple projects button action: navigate to /projects when clicked
-    projectsBtn.addEventListener('click', () => { window.location.href = '/projects'; });
-
+    // existing image preload and time code (unchanged)
+    const PRELOADMAP = new Map();
+    function preloadImages(){
+      const imgs = new Set();
+      document.querySelectorAll('.social-link').forEach(btn => { const src = btn.dataset.img; if (src) imgs.add(src); });
+      imgs.forEach(src => { const img = new Image(); img.src = src; PRELOADMAP.set(src,img); });
+    }
     preloadImages();
 
+    // copy of swapAvatar, showForButton, hideForButton (simplified)
+    let currentLoadHandler = null;
+    function swapAvatar(newSrc){ if (!newSrc) return; const cur = avatarImg.getAttribute('src'); if (cur === newSrc) return; if (currentLoadHandler) avatarImg.removeEventListener('load', currentLoadHandler); currentLoadHandler = function(){ avatarImg.style.opacity = '1'; avatarImg.removeEventListener('load', currentLoadHandler); currentLoadHandler = null; }; avatarImg.addEventListener('load', currentLoadHandler); avatarImg.style.opacity = '0'; avatarImg.setAttribute('src', newSrc); setTimeout(() => { if (!currentLoadHandler) return; avatarImg.style.opacity = '1'; }, 250); }
+
+    function showForButton(btn){ const name = btn.dataset.username || ''; if (name) { displayName.textContent = name; displayName.classList.add('pop'); } }
+    function hideForButton(){ displayName.textContent = ORIGINAL.name; displayName.classList.remove('pop'); if (!pinned) swapAvatar(ORIGINAL.avatar); }
+
+    let pinned = null;
+
     // Time display in UTC-5 (fixed offset). shows `my time is 03:45 PM, UTC-5`
-    function updateTime(){
-      const now = new Date();
-      // convert to UTC ms, then apply -5h offset
-      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-      const target = new Date(utc + (-5 * 3600000));
-
-      let hours = target.getHours();
-      const minutes = target.getMinutes();
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12; hours = hours ? hours : 12; // 0 -> 12
-      const mm = minutes.toString().padStart(2,'0');
-      myTimeEl.textContent = `my time is ${hours}:${mm} ${ampm}, UTC-5`;
-    }
-
-    updateTime();
-    // update once a minute
-    setInterval(updateTime, 60*1000);
+    function updateTime(){ const now = new Date(); const utc = now.getTime() + (now.getTimezoneOffset() * 60000); const target = new Date(utc + (-5 * 3600000)); let hours = target.getHours(); const minutes = target.getMinutes(); const ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12; hours = hours ? hours : 12; const mm = minutes.toString().padStart(2,'0'); myTimeEl.textContent = `my time is ${hours}:${mm} ${ampm}, UTC-5`; }
+    updateTime(); setInterval(updateTime, 60*1000);
   </script>
 </body>
 </html>
