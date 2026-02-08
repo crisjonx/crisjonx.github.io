@@ -58,9 +58,17 @@ body{
 
 .social-img{width:22px;height:22px;display:block;object-fit:contain;filter:brightness(1.05)}
 
-/* projects view styles */
-.back-btn{display:none;background:transparent;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:6px;border-radius:8px}
-.back-btn.visible{display:inline-flex;align-items:center;justify-content:center}
+/* projects view styles (back arrow hidden until visible class) */
+.back-btn{
+  opacity:0;
+  pointer-events:none;
+  background:transparent;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:6px;border-radius:8px;
+  transition:opacity .14s ease;
+}
+.back-btn.visible{
+  opacity:1;
+  pointer-events:auto;
+}
 
 .projects{margin-top:12px}
 .project-item{display:block;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
