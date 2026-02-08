@@ -25,7 +25,6 @@
             <button id="back-btn" class="back-btn" aria-label="back">←</button>
             <h1 class="name" id="display-name">crisjonx</h1>
           </div>
-          <!-- single Projects button (topbar already shows one, this keeps header tidy) -->
         </div>
 
         <ul class="tag-list" id="tag-list" aria-label="Short bio">
@@ -79,11 +78,10 @@
 
     const ORIGINAL = { name: displayName.textContent, avatar: avatarImg.getAttribute('src') };
 
-    // projects array (one-line desc). Edit as needed.
+    // projects array — edited: TAKINA REMOVED (it was the problematic one)
     const projects = [
-      { name: 'Takina', href: 'https://git.orangc.net/c/takina', desc: 'Open-source Discord bot (Python)' },
       { name: 'pyminaret', href: 'https://git.orangc.net/c/pyminaret', desc: 'CLI prayer notifier' },
-      { name: 'qurandl', href: 'https://git.orangc.net/c/qurandl', desc: 'Mass-download Qur\\'an program' },
+      { name: 'qurandl', href: 'https://git.orangc.net/c/qurandl', desc: "Mass-download Qur'an program" },
       { name: 'Walls', href: 'https://orangc.net/c/walls', desc: 'Curated wallpaper collection' },
       { name: 'Create-addons', href: 'https://create.orangc.net', desc: 'Index of Create mod addons' }
     ];
@@ -100,17 +98,14 @@
         a.href = p.href;
         a.textContent = p.name;
         a.setAttribute('role','link');
-        a.style.display = 'inline-block'; // ensure underline width equals text
+        a.style.display = 'inline-block'; // ensures underline width equals text
 
         const desc = document.createElement('div');
         desc.className = 'project-desc';
         desc.textContent = p.desc;
 
-        // clicking item navigates same tab
-        item.addEventListener('click', (ev) => {
-          // if user clicked a link with modifier, let the browser handle it (rare)
-          window.location.href = p.href;
-        });
+        // clicking the item navigates same tab
+        item.addEventListener('click', () => { window.location.href = p.href; });
 
         item.appendChild(a);
         item.appendChild(desc);
@@ -121,11 +116,11 @@
     // enter/exit projects
     function enterProjects(){
       icons.classList.add('hidden');
-      displayName.textContent = 'projects'; // changed as requested
+      displayName.textContent = 'projects';
       tagList.classList.add('hidden');
       renderProjects();
       projectsContainer.classList.remove('hidden');
-      backBtn.classList.add('visible');
+      backBtn.classList.add('visible'); // shows the arrow
     }
 
     function exitProjects(){
@@ -133,7 +128,7 @@
       displayName.textContent = ORIGINAL.name;
       tagList.classList.remove('hidden');
       projectsContainer.classList.add('hidden');
-      backBtn.classList.remove('visible');
+      backBtn.classList.remove('visible'); // hides the arrow
     }
 
     projectsBtn.addEventListener('click', enterProjects);
@@ -180,7 +175,7 @@
       if (name) displayName.textContent = name;
     });
 
-    // preload icons (no change)
+    // preload icons
     (function preload(){
       document.querySelectorAll('.social-link').forEach(btn => {
         const src = btn.dataset.img;
@@ -189,7 +184,7 @@
       });
     })();
 
-    // time (UTC-5 display, unchanged)
+    // time (UTC-5 display)
     function updateTime(){
       const now = new Date();
       const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
