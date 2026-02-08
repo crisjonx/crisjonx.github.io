@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- single Projects button at top-right -->
+  <!-- Projects button fixed top-right -->
   <div class="topbar">
     <button id="projects-btn" class="projects-btn" aria-label="projects">Projects</button>
   </div>
@@ -23,10 +23,11 @@
       </div>
 
       <div style="flex:1">
-        <div class="header-row" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-          <div style="display:flex;align-items:center;gap:8px">
-            <button id="back-btn" class="back-btn" aria-label="back">←</button>
-            <h1 class="name" id="display-name">crisjonx</h1>
+        <!-- Name on its own line; back arrow row is below it and hidden until projects open -->
+        <div class="header-row">
+          <h1 class="name" id="display-name">crisjonx</h1>
+          <div class="back-row">
+            <button id="back-btn" class="back-btn" aria-label="back">← projects</button>
           </div>
         </div>
 
@@ -60,6 +61,7 @@
             <img class="social-img" src="/icons/namemc.png" alt="NameMC">
           </button>
         </div>
+
       </div>
     </div>
   </main>
@@ -79,17 +81,14 @@
 
     const ORIGINAL = { name: displayName.textContent, avatar: avatarImg.getAttribute('src') };
 
-    // ---------- Projects data (edit here) ----------
-    // One-line description only. Clicking navigates current tab.
+    // Projects data (edit here)
     const projects = [
       { name: 'pyminaret', href: 'https://git.orangc.net/c/pyminaret', desc: 'CLI prayer notifier' },
-      { name: 'qurandl', href: 'https://git.orangc.net/c/qurandl', desc: 'Mass-download Qur\\'an program' },
+      { name: 'qurandl', href: 'https://git.orangc.net/c/qurandl', desc: "Mass-download Qur'an program" },
       { name: 'Walls', href: 'https://orangc.net/c/walls', desc: 'Curated wallpaper collection' },
       { name: 'Create-addons', href: 'https://create.orangc.net', desc: 'Index of Create mod addons' }
     ];
-    // -----------------------------------------------
 
-    // Render projects (anchor inline-block so underline matches text)
     function renderProjects(){
       projectsContainer.innerHTML = '';
       projects.forEach(p => {
@@ -100,17 +99,13 @@
         a.className = 'project-link';
         a.href = p.href;
         a.textContent = p.name;
-        a.style.display = 'inline-block'; // makes ::after follow text width
+        a.style.display = 'inline-block';
 
         const desc = document.createElement('div');
         desc.className = 'project-desc';
         desc.textContent = p.desc;
 
-        // Item click navigates same tab (keeps anchor semantics for ctrl/middle click)
-        item.addEventListener('click', (ev) => {
-          // avoid interfering if user clicked a link with modifier (rare)
-          window.location.href = p.href;
-        });
+        item.addEventListener('click', () => { window.location.href = p.href; });
 
         item.appendChild(a);
         item.appendChild(desc);
@@ -120,11 +115,11 @@
 
     function enterProjects(){
       icons.classList.add('hidden');
-      displayName.textContent = 'projects';     // requested: display "projects"
+      displayName.textContent = 'projects';
       tagList.classList.add('hidden');
       renderProjects();
       projectsContainer.classList.remove('hidden');
-      backBtn.classList.add('visible');         // show back arrow (fades in via CSS)
+      backBtn.classList.add('visible');
     }
 
     function exitProjects(){
@@ -132,13 +127,13 @@
       displayName.textContent = ORIGINAL.name;
       tagList.classList.remove('hidden');
       projectsContainer.classList.add('hidden');
-      backBtn.classList.remove('visible');      // hide arrow
+      backBtn.classList.remove('visible');
     }
 
     projectsBtn.addEventListener('click', enterProjects);
     backBtn.addEventListener('click', exitProjects);
 
-    // Icons: same-tab redirect on click
+    // icons: same-tab redirect
     icons.addEventListener('click', e => {
       const btn = e.target.closest('.social-link');
       if (!btn) return;
@@ -147,18 +142,16 @@
       window.location.href = url;
     });
 
-    // Hover: show username only, do not change avatar
+    // hover name change only
     icons.addEventListener('pointerover', e => {
       const btn = e.target.closest('.social-link');
       if (!btn) return;
       const name = btn.dataset.username || '';
       if (name) displayName.textContent = name;
     });
-    icons.addEventListener('pointerout', () => {
-      displayName.textContent = ORIGINAL.name;
-    });
+    icons.addEventListener('pointerout', () => { displayName.textContent = ORIGINAL.name; });
 
-    // Double-click pin (unchanged) — changes avatar
+    // double-click pin (changes avatar)
     let pinned = null;
     icons.addEventListener('dblclick', e => {
       const btn = e.target.closest('.social-link');
@@ -179,7 +172,7 @@
       if (name) displayName.textContent = name;
     });
 
-    // Preload icons
+    // preload icons
     (function preload(){
       document.querySelectorAll('.social-link').forEach(btn => {
         const src = btn.dataset.img;
@@ -188,7 +181,7 @@
       });
     })();
 
-    // Time (UTC-5)
+    // time (UTC-5)
     function updateTime(){
       const now = new Date();
       const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
