@@ -9,6 +9,11 @@
   <!-- Merriweather -->
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Inline tweaks to ensure behavior while you test quickly — you can move this to styles.css if you prefer */
+    :root{--bg:#0b0b0b;--muted:#9aa4b2;--text:#ffffff;--pop:#9b8cff;--surface:#141416;}
+    body{background:var(--bg);font-family:'Merriweather',serif;color:var(--text)}
+  </style>
 </head>
 <body>
   <main class="card" id="profile-card" role="main">
@@ -18,16 +23,12 @@
       </div>
 
       <div class="meta" style="flex:1">
-        <!-- header row: name on its own line (left), Projects button on the right -->
+        <!-- Name on its own line; Projects button on the right, no wrapping -->
         <div class="header-row">
           <div class="header-column">
             <h1 class="name" id="display-name">crisjonx</h1>
-            <!-- back arrow appears BELOW the name when visible -->
-            <div class="back-row">
-              <button id="back-btn" class="back-btn" aria-label="back">←</button>
-            </div>
+            <div class="back-row"><button id="back-btn" class="back-btn" aria-label="back">←</button></div>
           </div>
-
           <div class="header-actions">
             <button id="projects-btn" class="projects-btn" aria-label="projects">Projects</button>
           </div>
@@ -39,7 +40,6 @@
           <li tabindex="0"><span class="tag-text">luau</span></li>
         </ul>
 
-        <!-- projects container (hidden by default) -->
         <section id="projects-container" class="projects hidden" aria-label="Projects list"></section>
 
         <div class="icons" id="icons" style="margin-top:14px;">
@@ -69,6 +69,66 @@
 
   <div class="time" id="my-time">my time is --:-- --, UTC-5</div>
 
-  <script src="script.js"></script>
+  <script>
+    // Grab elements
+    const icons = document.getElementById('icons');
+    const displayName = document.getElementById('display-name');
+    const avatarImg = document.getElementById('avatar-img');
+    const myTimeEl = document.getElementById('my-time');
+    const projectsBtn = document.getElementById('projects-btn');
+    const backBtn = document.getElementById('back-btn');
+    const tagList = document.getElementById('tag-list');
+    const projectsContainer = document.getElementById('projects-container');
+
+    const ORIGINAL = { name: displayName.textContent, avatar: avatarImg.getAttribute('src') };
+
+    // placeholders
+    const projects = Array.from({length:5}, () => ({name:'Project 1', href:'/projects/project-1', desc:'A short, one-line project description.'}));
+
+    function renderProjects(){
+      projectsContainer.innerHTML = '';
+      projects.forEach(p => {
+        const item = document.createElement('div'); item.className='project-item';
+        const a = document.createElement('a'); a.className='project-link'; a.href=p.href; a.textContent=p.name; a.style.display='inline-block';
+        const desc=document.createElement('div'); desc.className='project-desc'; desc.textContent=p.desc;
+        item.addEventListener('click', (ev)=>{ if(ev.ctrlKey||ev.metaKey||ev.shiftKey||ev.button===1) return; window.location.href=p.href; });
+        item.appendChild(a); item.appendChild(desc); projectsContainer.appendChild(item);
+      });
+    }
+
+    function enterProjects(){
+      icons.classList.add('hidden');
+      displayName.textContent='projects';
+      tagList.classList.add('hidden');
+      renderProjects(); projectsContainer.classList.remove('hidden');
+      backBtn.classList.add('visible');
+      // hide the projects button so it doesn't wrap and duplicate text
+      projectsBtn.classList.add('hidden');
+    }
+    function exitProjects(){
+      icons.classList.remove('hidden');
+      displayName.textContent=ORIGINAL.name; tagList.classList.remove('hidden'); projectsContainer.classList.add('hidden');
+      backBtn.classList.remove('visible'); projectsBtn.classList.remove('hidden');
+    }
+
+    projectsBtn.addEventListener('click', enterProjects);
+    backBtn.addEventListener('click', exitProjects);
+
+    // icons behavior
+    icons.addEventListener('click', e=>{ const btn = e.target.closest('.social-link'); if(!btn) return; const url = btn.dataset.url; if(!url) return; if(e.ctrlKey||e.metaKey||e.shiftKey||e.button===1) return; window.location.href = url; });
+    icons.addEventListener('pointerover', e=>{ const btn = e.target.closest('.social-link'); if(!btn) return; const name = btn.dataset.username||''; if(name) displayName.textContent=name; });
+    icons.addEventListener('pointerout', ()=>{ displayName.textContent=ORIGINAL.name; });
+
+    // pin on dblclick
+    let pinned=null;
+    icons.addEventListener('dblclick', e=>{ const btn = e.target.closest('.social-link'); if(!btn) return; if(pinned===btn){ btn.classList.remove('pinned'); pinned=null; displayName.textContent=ORIGINAL.name; avatarImg.setAttribute('src', ORIGINAL.avatar); return;} if(pinned) pinned.classList.remove('pinned'); pinned = btn; pinned.classList.add('pinned'); const img=btn.dataset.img||null; if(img) avatarImg.setAttribute('src', img); const name=btn.dataset.username||''; if(name) displayName.textContent=name; });
+
+    // preload icons
+    (function(){ document.querySelectorAll('.social-link').forEach(b=>{ const s=b.dataset.img; if(!s) return; const im=new Image(); im.src=s; }); })();
+
+    // time
+    function updateTime(){ const now=new Date(); const utc = now.getTime() + (now.getTimezoneOffset()*60000); const target = new Date(utc + (-5*3600000)); let hours = target.getHours(); const minutes = target.getMinutes(); const ampm = hours>=12?'PM':'AM'; hours = hours%12; hours = hours?hours:12; const mm = minutes.toString().padStart(2,'0'); myTimeEl.textContent = `my time is ${hours}:${mm} ${ampm}, UTC-5`; }
+    updateTime(); setInterval(updateTime,60000);
+  </script>
 </body>
 </html>
