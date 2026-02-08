@@ -8,64 +8,7 @@
   <link rel="icon" type="image/x-icon" href="/icons/logo.ico">
   <!-- Merriweather -->
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      --bg: #0b0b0b;
-      --muted: #9aa4b2;
-      --text: #ffffff;
-      --pop: #9b8cff;
-      --surface: #141416;
-      --purple-light: rgba(124,92,255,0.22);
-      --purple-dark: #dcd6ff;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:'Merriweather', Georgia, serif;background:var(--bg);color:var(--text);display:flex;align-items:center;justify-content:center;padding:28px}
-
-    .card{width:100%;max-width:900px;background:transparent;padding:12px;border:none}
-    .top{display:flex;gap:20px;align-items:center}
-    .avatar{width:96px;height:96px;border-radius:999px;background:var(--surface);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid rgba(255,255,255,0.04)}
-    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
-
-    .meta{display:flex;flex-direction:column;justify-content:center}
-    /* move name down a bit */
-    .header-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-    .header-column{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:14px}
-
-    .name{font-size:30px;margin:0;font-weight:700;line-height:1}
-    .name.pop{color:var(--pop)}
-
-    .header-actions{display:flex;align-items:flex-start;gap:8px}
-    .projects-btn,.links-btn{background:transparent;color:var(--text);border:none;padding:6px 12px;border-radius:8px;cursor:pointer;font-weight:600;transition:background-color .18s ease,color .18s ease;font-family:'Merriweather',serif}
-    .projects-btn:hover,.links-btn:hover{background:var(--purple-light);color:var(--purple-dark)}
-
-    .back-row{height:0} /* remove space used before */
-
-    .tag-list{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;list-style:none;padding:0;margin:8px 0 0 0;align-items:center}
-    .tag-list li{position:relative;padding-bottom:4px;color:var(--muted);cursor:default}
-    .tag-list li .tag-text{position:relative;display:inline-block}
-    .tag-list li .tag-text::after{content:'';position:absolute;left:0;bottom:-2px;height:2px;width:100%;background:var(--pop);transform:scaleX(0);transform-origin:left center;transition:transform 260ms}
-    .tag-list li .tag-text:hover::after{transform:scaleX(1)}
-    .tag-list li:not(:last-child)::after{content:'•';margin-left:12px;color:var(--muted);position:static}
-
-    .icons{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
-    .social-link{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:9px;cursor:pointer;transition:transform .12s ease;background:transparent;border:none;overflow:hidden}
-    .social-link:hover{transform:scale(1.12)}
-    .social-img{width:22px;height:22px;display:block;object-fit:contain}
-
-    .projects{margin-top:12px}
-    .project-item{display:block;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
-    .project-link{font-weight:700;color:var(--text);text-decoration:none;position:relative;display:inline-block;padding-bottom:4px}
-    .project-link::after{content:'';position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--pop);transform:scaleX(0);transform-origin:left center;transition:transform 200ms}
-    .project-link:hover::after{transform:scaleX(1)}
-    .project-desc{color:var(--muted);font-size:14px;margin-top:4px}
-
-    .hidden{display:none}
-    .time{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);font-weight:600;color:var(--muted);background:transparent;padding:6px 8px;border-radius:6px}
-
-    @media (max-width:640px){.top{flex-direction:column;align-items:center;text-align:center}.avatar{width:84px;height:84px}.name{font-size:22px}.header-row{align-items:center}.header-actions{margin-top:6px}}
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <main class="card" id="profile-card" role="main">
@@ -121,61 +64,6 @@
   </main>
 
   <div class="time" id="my-time">my time is --:-- --, UTC-5</div>
-
-  <script>
-    const icons = document.getElementById('icons');
-    const displayName = document.getElementById('display-name');
-    const avatarImg = document.getElementById('avatar-img');
-    const myTimeEl = document.getElementById('my-time');
-    const projectsBtn = document.getElementById('projects-btn');
-    const linksBtn = document.getElementById('links-btn');
-    const tagList = document.getElementById('tag-list');
-    const projectsContainer = document.getElementById('projects-container');
-
-    const ORIGINAL = { name: displayName.textContent, avatar: avatarImg.getAttribute('src') };
-
-    const NUM_PLACEHOLDERS = 5;
-    const projects = Array.from({length:NUM_PLACEHOLDERS}, (_,i)=>({name:'Project 1', href:'/projects/project-1', desc:'A short, one-line project description.'}));
-
-    function renderProjects(){
-      projectsContainer.innerHTML = '';
-      projects.forEach(p=>{
-        const item = document.createElement('div'); item.className='project-item';
-        const a = document.createElement('a'); a.className='project-link'; a.href=p.href; a.textContent=p.name; a.style.display='inline-block';
-        const desc = document.createElement('div'); desc.className='project-desc'; desc.textContent=p.desc;
-        item.addEventListener('click', ev=>{ if(ev.ctrlKey||ev.metaKey||ev.shiftKey||ev.button===1) return; window.location.href=p.href; });
-        item.appendChild(a); item.appendChild(desc); projectsContainer.appendChild(item);
-      });
-    }
-
-    function enterProjects(){
-      icons.classList.add('hidden');
-      displayName.textContent='projects';
-      tagList.classList.add('hidden');
-      renderProjects(); projectsContainer.classList.remove('hidden');
-    }
-
-    function exitProjects(){
-      icons.classList.remove('hidden');
-      displayName.textContent=ORIGINAL.name;
-      tagList.classList.remove('hidden');
-      projectsContainer.classList.add('hidden');
-    }
-
-    projectsBtn.addEventListener('click', enterProjects);
-    linksBtn.addEventListener('click', exitProjects);
-
-    icons.addEventListener('click', e=>{ const btn = e.target.closest('.social-link'); if(!btn) return; const url = btn.dataset.url; if(!url) return; if(e.ctrlKey||e.metaKey||e.shiftKey||e.button===1) return; window.location.href = url; });
-    icons.addEventListener('pointerover', e=>{ const btn = e.target.closest('.social-link'); if(!btn) return; const name = btn.dataset.username||''; if(name) displayName.textContent=name; });
-    icons.addEventListener('pointerout', ()=>{ displayName.textContent = ORIGINAL.name; });
-
-    let pinned = null;
-    icons.addEventListener('dblclick', e=>{ const btn = e.target.closest('.social-link'); if(!btn) return; if(pinned===btn){ btn.classList.remove('pinned'); pinned=null; displayName.textContent=ORIGINAL.name; avatarImg.setAttribute('src', ORIGINAL.avatar); return; } if(pinned) pinned.classList.remove('pinned'); pinned=btn; pinned.classList.add('pinned'); const img = btn.dataset.img||null; if(img) avatarImg.setAttribute('src', img); const name = btn.dataset.username||''; if(name) displayName.textContent = name; });
-
-    (function preload(){ document.querySelectorAll('.social-link').forEach(b=>{ const s=b.dataset.img; if(!s) return; const im=new Image(); im.src=s; }); })();
-
-    function updateTime(){ const now = new Date(); const utc = now.getTime() + (now.getTimezoneOffset()*60000); const target = new Date(utc + (-5*3600000)); let hours = target.getHours(); const minutes = target.getMinutes(); const ampm = hours>=12?'PM':'AM'; hours = hours%12; hours = hours?hours:12; const mm = minutes.toString().padStart(2,'0'); myTimeEl.textContent = `my time is ${hours}:${mm} ${ampm}, UTC-5`; }
-    updateTime(); setInterval(updateTime,60000);
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
